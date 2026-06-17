@@ -1,3 +1,13 @@
+import MainLayout from "../layouts/MainLayout";
+
 export default function Alerts() {
-  return <h1>Alerts</h1>;
+  return (
+    <MainLayout>
+
+      <h1 className="text-3xl font-bold">
+        Alerts
+      </h1>
+
+    </MainLayout>
+  );
 }

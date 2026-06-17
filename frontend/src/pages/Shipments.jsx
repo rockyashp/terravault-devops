@@ -1,3 +1,13 @@
+import MainLayout from "../layouts/MainLayout";
+
 export default function Shipments() {
-  return <h1>Shipments</h1>;
+  return (
+    <MainLayout>
+
+      <h1 className="text-3xl font-bold">
+        Shipments
+      </h1>
+
+    </MainLayout>
+  );
 }
