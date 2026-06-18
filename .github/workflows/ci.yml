@@ -1,0 +1,52 @@
+name: TerraVault CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # ---------- FRONTEND ----------
+
+      - name: Install Frontend
+        working-directory: frontend
+        run: npm install
+
+      - name: Lint Frontend
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Build Frontend
+        working-directory: frontend
+        run: npm run build
+
+      # ---------- BACKEND ----------
+
+      - name: Install Backend
+        working-directory: backend
+        run: npm install
+
+      # ---------- Build Docker Images ----------
+
+      - name: Build Backend Image
+        run: docker build -t terravault-backend ./backend
+
+      - name: Build Frontend Image
+        run: docker build -t terravault-frontend ./frontend
