@@ -1,0 +1,46 @@
+services:
+
+  mongodb:
+    image: mongo:8
+    container_name: terravault-mongodb
+
+    restart: unless-stopped
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongodb_data:/data/db
+
+    networks:
+      - terravault-network
+
+  backend:
+    build:
+      context: ../../backend
+
+    container_name: terravault-backend
+
+    restart: unless-stopped
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - ../../backend/.env
+
+    depends_on:
+      - mongodb
+
+    networks:
+      - terravault-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  terravault-network:
