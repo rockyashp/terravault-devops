@@ -2,6 +2,7 @@ services:
 
   mongodb:
     image: mongo:8
+
     container_name: terravault-mongodb
 
     restart: unless-stopped
@@ -27,20 +28,39 @@ services:
 
     restart: unless-stopped
 
-    ports:
-      - "5000:5000"
-
     env_file:
       - ../../backend/.env
 
     depends_on:
       - mongodb
 
+    ports:
+      - "5000:5000"
+
+    networks:
+      - terravault-network
+
+  frontend:
+    build:
+      context: ../../frontend
+
+    container_name: terravault-frontend
+
+    restart: unless-stopped
+
+    depends_on:
+      - backend
+
+    ports:
+      - "8081:80"
+
     networks:
       - terravault-network
 
 volumes:
+
   mongodb_data:
 
 networks:
+
   terravault-network:
