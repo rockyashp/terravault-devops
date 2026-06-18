@@ -1,7 +1,35 @@
 import MainLayout from "../layouts/MainLayout";
 import Card from "../components/Card";
+import { useEffect, useState } from "react";
+import api from "../services/api";
 
 export default function Dashboard() {
+  // State to store data from the backend
+  const [dashboard, setDashboard] = useState(null);
+
+  // Fetch data when the page loads
+  useEffect(() => {
+    async function fetchDashboard() {
+      try {
+        const response = await api.get("/dashboard");
+        setDashboard(response.data);
+      } catch (error) {
+        console.error("Error fetching dashboard:", error);
+      }
+    }
+
+    fetchDashboard();
+  }, []);
+
+  // Show loading until data arrives
+  if (!dashboard) {
+    return (
+      <MainLayout>
+        <h1 className="text-3xl font-bold">Loading Dashboard...</h1>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
       {/* Page Heading */}
@@ -13,28 +41,28 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card
           title="Inventory"
-          value="12,450 Tons"
+          value={dashboard.inventory}
           subtitle="Available stock"
           color="blue"
         />
 
         <Card
           title="Shipments"
-          value="148"
+          value={dashboard.shipments}
           subtitle="Currently active"
           color="green"
         />
 
         <Card
           title="Active Mines"
-          value="24"
+          value={dashboard.activeMines}
           subtitle="Operational sites"
           color="orange"
         />
 
         <Card
           title="Alerts"
-          value="3"
+          value={dashboard.alerts}
           subtitle="Require attention"
           color="red"
         />
